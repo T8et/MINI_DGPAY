@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/ReadMe/">
+    <File Path="ReadMe/Version.cs" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Scripts/01. Setup.sql" />
+    <File Path="Scripts/02. Setup.sql" />
+  </Folder>
+  <Project Path="MINI_DGPAY.ApiServices/MINI_DGPAY.ApiServices.csproj" Id="a461a9ff-67c2-4509-a015-bf948fe83ae7" />
+  <Project Path="MINI_DGPAY.DataHub/MINI_DGPAY.DataHub.csproj" />
+  <Project Path="MINI_DGPAY.Services/MINI_DGPAY.Services.csproj" Id="2bfa7428-2f43-4928-9510-db7f55852f8a" />
+</Solution>
