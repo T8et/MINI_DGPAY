@@ -39,18 +39,32 @@ namespace MINI_DGPAY.Services.Main
             return account;
         }
 
-        public async Task<BtAccount> Update(BtAccount account)
+        public async Task<string> Update(string code, string username, string moddate, string modby)
         {
-            var existingAccount = await db.BtAccounts.FirstOrDefaultAsync(x => x.UserId == account.UserId);
+            string msg = "";
+            var existingAccount = await db.BtAccounts.FirstOrDefaultAsync(x => x.UserId == code);
             if (existingAccount == null)
             {
-                throw new Exception("Account not found");
+                msg = "Account not found";
+                return msg;
             }
-            existingAccount.UserBalance = account.UserBalance;
-            existingAccount.ModifyDate = DateTime.UtcNow;
-            existingAccount.ModifyBy = account.ModifyBy;
-            await db.SaveChangesAsync();
-            return existingAccount;
+
+            if(username != null) existingAccount.UserName = username;
+
+            if (moddate != null) existingAccount.ModifyDate = DateTime.UtcNow;
+
+            if (modby != null) existingAccount.ModifyBy = modby;
+
+            try
+            {
+                await db.SaveChangesAsync();
+                msg = "Account updated successfully";
+            }
+            catch (Exception)
+            {
+                msg = "Error occurred while updating account";
+            }
+            return msg;
         }
     }
 }

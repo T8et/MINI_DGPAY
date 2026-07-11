@@ -9,7 +9,7 @@ namespace MINI_DGPAY.ApiServices.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private AccServices acc;
+        protected AccServices acc;
         public AccountController(AccServices _acc)
         {
             this.acc = _acc;
@@ -37,9 +37,16 @@ namespace MINI_DGPAY.ApiServices.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> Update(BtAccount account)
+        public async Task<IActionResult> Update(string code, string? username, string? moddate, string? modby)
         {
-            var response = await acc.Update(account);
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Code is required");
+            }else if(string.IsNullOrEmpty(username) && string.IsNullOrEmpty(moddate) && string.IsNullOrEmpty(modby))
+            {
+                return BadRequest("At least one field to update is required");
+            }
+            var response = await acc.Update(code, username, moddate, modby);
             return Ok(response);
         }
     }
