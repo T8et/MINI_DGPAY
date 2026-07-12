@@ -11,9 +11,11 @@ namespace MINI_DGPAY.Services.Main
     public class AccServices
     {
         private AppDBContext db;
-        public AccServices(AppDBContext _db)
+        private ResultModel resmdl;
+        public AccServices(AppDBContext _db, ResultModel resmdl)
         {
             this.db = _db;
+            this.resmdl = resmdl;
         }
 
         public async Task<List<BtAccount>> GetAll()
@@ -22,31 +24,29 @@ namespace MINI_DGPAY.Services.Main
             return response;
         }
 
-        public async Task<BtAccount> GetById(string id)
+        public async Task<CommonResponse<BtAccount>> GetById(string id)
         {
             var response = await db.BtAccounts.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == id);
             if (response == null)
             {
-                throw new Exception("Account not found");
+                return resmdl.acresponse = CommonResponse<BtAccount>.NotFound();
             }
-            return response;
+            return resmdl.acresponse = CommonResponse<BtAccount>.Success();
         }
 
-        public async Task<BtAccount> Create(BtAccount account)
+        public async Task<CommonResponse<BtAccount>> Create(BtAccount account)
         {
             await db.BtAccounts.AddAsync(account);
             await db.SaveChangesAsync();
-            return account;
+            return resmdl.acresponse = CommonResponse<BtAccount>.Success();
         }
 
-        public async Task<string> Update(string code, string username, string moddate, string modby)
+        public async Task<CommonResponse<BtAccount>> Update(string code, string username, string moddate, string modby)
         {
-            string msg = "";
             var existingAccount = await db.BtAccounts.FirstOrDefaultAsync(x => x.UserId == code);
             if (existingAccount == null)
             {
-                msg = "Account not found";
-                return msg;
+                return resmdl.acresponse = CommonResponse<BtAccount>.NotFound("","Account Not Exists");
             }
 
             if(username != null) existingAccount.UserName = username;
@@ -58,13 +58,12 @@ namespace MINI_DGPAY.Services.Main
             try
             {
                 await db.SaveChangesAsync();
-                msg = "Account updated successfully";
+                return resmdl.acresponse = CommonResponse<BtAccount>.Success();
             }
             catch (Exception)
             {
-                msg = "Error occurred while updating account";
+                return resmdl.acresponse = CommonResponse<BtAccount>.SystemError();
             }
-            return msg;
         }
     }
 }

@@ -17,8 +17,13 @@ builder.Services.AddDbContext<AppDBContext>(
     }
 );
 
-builder.Services.AddScoped<AccServices>();
+builder.Services.AddScoped<CommonResponse<BtAccount>>();
+builder.Services.AddScoped<CommonResponse<BtTransaction>>();
 builder.Services.AddScoped<TranServices>();
+builder.Services.AddScoped<AccServices>();
+builder.Services.AddScoped<ResultModel>();
+builder.Services.AddScoped<TranServices>();
+
 
 var app = builder.Build();
 

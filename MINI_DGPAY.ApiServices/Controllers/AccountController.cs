@@ -7,7 +7,7 @@ namespace MINI_DGPAY.ApiServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : ResponseController
     {
         protected AccServices acc;
         public AccountController(AccServices _acc)
@@ -33,7 +33,7 @@ namespace MINI_DGPAY.ApiServices.Controllers
         public async Task<IActionResult> Create(BtAccount account)
         {
             var response = await acc.Create(account);
-            return Ok(response);
+            return Execute(response);
         }
 
         [HttpPut("Update")]
@@ -47,7 +47,7 @@ namespace MINI_DGPAY.ApiServices.Controllers
                 return BadRequest("At least one field to update is required");
             }
             var response = await acc.Update(code, username, moddate, modby);
-            return Ok(response);
+            return Execute(response);
         }
     }
 }

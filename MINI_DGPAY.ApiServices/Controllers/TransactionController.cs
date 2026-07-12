@@ -7,7 +7,7 @@ namespace MINI_DGPAY.ApiServices.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class TransactionController : ResponseController
     {
         private readonly TranServices services;
         public TransactionController(TranServices _services)
@@ -26,18 +26,28 @@ namespace MINI_DGPAY.ApiServices.Controllers
         public async Task<IActionResult> GetById(string code)
         {
             var response = await services.GetById(code);
-            if (response == null)
-            {
-                return NotFound(response);
-            }
             return Ok(response);
         }
 
         [HttpPost("MakeDeposit")]
-        public async Task<IActionResult> MakeDeposit(string sender, string receiver, decimal amount, string remark)
+        public async Task<IActionResult> MakeDeposit(string sender, decimal amount, string remark)
         {
-            var response = await services.MakeDeposit(sender, receiver, amount, remark);
-            return Ok(response);
+            var response = await services.MakeDeposit(sender, amount, remark);
+            return Execute(response);
+        }
+
+        [HttpPost("MakeWithdrawal")]
+        public async Task<IActionResult> MakeWithdrawal(string sender, decimal amount, string remark, int pin = 0)
+        {
+            var response = await services.MakeWithdrawl(sender, amount, remark, pin);
+            return Execute(response);
+        }
+
+        [HttpPost("MakeTransfer")]
+        public async Task<IActionResult> MakeTransfer(string sender, string receiver, decimal amount, string remark, int pin)
+        {
+            var response = await services.MakeTransfer(sender, receiver, amount, remark, pin);
+            return Execute(response);
         }
     }
 }
