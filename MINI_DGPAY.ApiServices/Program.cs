@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDBContext>(
 );
 
 builder.Services.AddScoped<AccServices>();
+builder.Services.AddScoped<TranServices>();
 
 var app = builder.Build();
 
